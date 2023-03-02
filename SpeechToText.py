@@ -9,7 +9,7 @@ r = sr.Recognizer()
 mic = sr.Microphone()
 
 
-input("press when ready")git 
+input("press when ready")
 with mic as source:
     audio = r.listen(source)
 
