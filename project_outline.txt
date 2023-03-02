@@ -66,3 +66,22 @@ SpeechToText class:
     It would also contain methods to handle common tasks such as adjusting sensitivity and selecting a language.
 
 ------------------------------------------------------------------------------------------------------------------------
+
+high-level overview of the program flow, from receiving voice input to performing the correct action:
+
+    1) The user speaks a command to the virtual assistant.
+
+    2) The virtual assistant records the audio input and converts it to text using the SpeechToText class.
+
+    3) The text input is passed to the IntentClassifier class, which classifies the user's intent based on the
+    input text.
+
+    4) The ActionHandler class is called with the classified intent, which determines the appropriate action
+    to take based on the intent.
+
+    5) The appropriate action is performed, such as retrieving weather information or opening an application.
+
+    6) If the action requires a text response, such as a weather forecast, the text output is passed to the
+    TextToSpeech class, which converts the text to speech output.
+
+    7) The virtual assistant speaks the response to the user using a speaker or headphones.
