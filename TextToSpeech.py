@@ -54,4 +54,4 @@ class TextToSpeech:
         Args:
             text: A string representing the text to be spoken.
         """
-       
+
