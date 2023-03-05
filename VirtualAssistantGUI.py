@@ -12,14 +12,12 @@ class VirtualAssistantGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        """
-        Initializes the main window, input and output widgets, and event handlers for user input.
-        """
 
         # Adding a title to the window
         self.wm_title("Virtual Assistant")
 
-        # creating a frame and assigning it to container
+
+        # creates a container to store each page
         container = ttk.Frame(self, height=400, width=600)
         # specifying the region where the frame is packed in root
         container.pack(side="top", fill="both", expand=True)
@@ -28,9 +26,9 @@ class VirtualAssistantGUI(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        # We will now create a dictionary of frames
+        # creates a dictionary of frames
+        # allows access to objects from each page/frame
         self.frames = {}
-        # we'll create the frames themselves later but let's add the components to the dictionary.
         for F in (MainPage, HelpPage, SettingsPage):
             frame = F(container, self)
 
@@ -71,7 +69,17 @@ class VirtualAssistantGUI(tk.Tk):
         """
         Custom function to handle the click event.
         """
-        print("Assistant clicked")
+        # Get the coordinates of the click event
+        x, y = event.x, event.y
+        # Get the coordinates of the center of the circle
+        cx, cy = self.frames[MainPage].canvas.coords(self.frames[MainPage].image_id)
+        # Calculate the distance between the click coordinates and the center of the circle
+        distance = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+        # Get the radius of the circle
+        r = self.assistant_image.width() / 2
+        # Check if the distance is less than or equal to the radius of the circle
+        if distance <= r:
+            print("Assistant clicked")
 
     def animate_image(self):
         """
