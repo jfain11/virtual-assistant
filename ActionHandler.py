@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class ActionHandler:
 
     def __init__(self):
@@ -18,7 +20,12 @@ class ActionHandler:
     def handle_time(self, entity):
         # Handle the time intent by returning the current time
         # or a specific time if provided in the entity
-        pass
+        date_string = '2009-11-29 03:17 PM'
+        format = '%Y-%m-%d %I:%M %p'
+        my_date = datetime.strptime(date_string, format)
+
+        # This prints '2009-11-29 03:17 AM'
+        print(my_date.strftime(format))
 
     def handle_weather(self, entity):
         # Handle the weather intent by returning the current weather
