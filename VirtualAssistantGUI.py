@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import sv_ttk
+import time
+from PIL import Image, ImageTk
 
 class VirtualAssistantGUI(tk.Tk):
     """
@@ -15,10 +17,10 @@ class VirtualAssistantGUI(tk.Tk):
         """
 
         # Adding a title to the window
-        self.wm_title("Test Application")
+        self.wm_title("Virtual Assistant")
 
         # creating a frame and assigning it to container
-        container = tk.Frame(self, height=400, width=600)
+        container = ttk.Frame(self, height=400, width=600)
         # specifying the region where the frame is packed in root
         container.pack(side="top", fill="both", expand=True)
 
@@ -29,7 +31,7 @@ class VirtualAssistantGUI(tk.Tk):
         # We will now create a dictionary of frames
         self.frames = {}
         # we'll create the frames themselves later but let's add the components to the dictionary.
-        for F in (MainPage, SidePage, CompletionScreen):
+        for F in (MainPage, HelpPage, SettingsPage):
             frame = F(container, self)
 
             # the windows class acts as the root window for the frames.
@@ -39,71 +41,117 @@ class VirtualAssistantGUI(tk.Tk):
         # Using a method to switch frames
         self.show_frame(MainPage)
 
+        # Binding the click event to the image
+        self.frames[MainPage].canvas.tag_bind(self.frames[MainPage].image_id, '<ButtonPress-1>', self.handle_click)
+
+        # Scheduling the animation
+        self.angle = 0
+        self.rotate_direction = 1  # 1 for clockwise, -1 for counterclockwise
+        self.animate_image()
+
+        sv_ttk.set_theme("dark")
+
     def show_frame(self, cont):
         frame = self.frames[cont]
         # raises the current frame to the top
         frame.tkraise()
 
+    # adds the virtual assistant's response to the response_window
+    def add_response(self, response):
+        self.frames[MainPage].response_box.configure(state="normal")
+        for char in response:
+            self.frames[MainPage].response_box.insert(tk.END, char)
+            self.frames[MainPage].response_box.see(tk.END)
+            self.update()
+            time.sleep(0.05)
+        self.frames[MainPage].response_box.insert(tk.END, "\n")
+        self.frames[MainPage].response_box.configure(state="disabled")
+
+    def handle_click(self, event):
+        """
+        Custom function to handle the click event.
+        """
+        print("Assistant clicked")
+
+    def animate_image(self):
+        """
+        Function to animate the image by rotating it.
+        """
+        self.angle += 5 * self.rotate_direction
+        if self.angle >= 360:
+            self.angle = 0
+        elif self.angle < 0:
+            self.angle = 359
+
+        # Rotate the image
+        img = Image.open("assistant2.png")
+        img = img.rotate(self.angle)
+        self.assistant_image = ImageTk.PhotoImage(img)
+
+        # Update the canvas image
+        self.frames[MainPage].canvas.itemconfig(self.frames[MainPage].image_id, image=self.assistant_image)
+
+        # Call this function again after 50ms
+        self.after(50, self.animate_image)
+
+
+# MAIN WINDOW
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Main Page")
+        label = ttk.Label(self, text="Main Page", wraplength=100000)
         label.pack(padx=10, pady=10)
+
+        # Creating a canvas to place the image
+        self.canvas = tk.Canvas(self, width=400, height=400)
+        self.canvas.pack()
+
+        # Loading the image using PhotoImage
+        self.assistant_image = tk.PhotoImage(file="assistant2.png")
+        self.image_id = self.canvas.create_image(200, 200, image=self.assistant_image)
+
+
+
+        # Adding the text widget to the frame
+        self.response_box = tk.Text(self, height=10, width=50, state="disabled")
+        self.response_box.pack()
 
         # We use the switch_window_button in order to call the show_frame() method as a lambda function
-        switch_window_button = tk.Button(
-            self,
-            text="Go to the Side Page",
-            command=lambda: controller.show_frame(SidePage),
-        )
-        switch_window_button.pack(side="bottom", fill=tk.X)
-
-class SidePage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="This is the Side Page")
-        label.pack(padx=10, pady=10)
-
-        switch_window_button = tk.Button(
-            self,
-            text="Go to the Completion Screen",
-            command=lambda: controller.show_frame(CompletionScreen),
-        )
-        switch_window_button.pack(side="bottom", fill=tk.X)
-
-class CompletionScreen(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Completion Screen, we did it!")
-        label.pack(padx=10, pady=10)
         switch_window_button = ttk.Button(
-            self, text="Return to menu", command=lambda: controller.show_frame(MainPage)
+            self,
+            text="Help",
+            command=lambda: controller.show_frame(HelpPage),
         )
+        switch_window_button.pack(side="bottom", fill=tk.X)
+
+        switch_window_button = ttk.Button(
+            self,
+            text="Settings",
+            command=lambda: controller.show_frame(SettingsPage),
+        )
+        switch_window_button.pack(side="bottom", fill=tk.X)
+
+# HELP PAGE
+class HelpPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = ttk.Label(self, text="This is the Help Page", wraplength=100000)
+        label.pack(padx=10, pady=10)
+
+        switch_window_button = ttk.Button(self, text="Return", command=lambda: controller.show_frame(MainPage))
         switch_window_button.pack(side="bottom", fill=tk.X)
 
 
 
+# OPTIONS PAGE
+class SettingsPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = ttk.Label(self, text="This is the Settings Page", wraplength=100000)
+        label.pack(padx=10, pady=10)
 
-
-
-
-
-
-
-
-
-
-
-        # self.root = tk.Tk()
-        # self.root.geometry("700x900")
-        #
-        # button = ttk.Button(self.root, text="Click Me")
-        # button.pack()
-        #
-        # sv_ttk.set_theme("dark")
-        #
-        # self.root.mainloop()
-
+        switch_window_button = ttk.Button(self, text="Return", command=lambda: controller.show_frame(MainPage))
+        switch_window_button.pack(side="bottom", fill=tk.X)
 
 
 
@@ -140,5 +188,8 @@ class CompletionScreen(tk.Frame):
 
 if __name__ == "__main__":
     testObj = VirtualAssistantGUI()
+
+    testObj.add_response("hello this is my big fat nuts mothafricka")
+
     testObj.mainloop()
 
