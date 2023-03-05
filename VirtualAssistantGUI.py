@@ -4,6 +4,11 @@ import sv_ttk
 import time
 from PIL import Image, ImageTk
 
+
+#-----------------------------------------------------------------------------------------------------------------------
+# GUI CONTAINER
+
+
 class VirtualAssistantGUI(tk.Tk):
     """
     This class is responsible for handling user input and providing output through the GUI.
@@ -12,10 +17,8 @@ class VirtualAssistantGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-
         # Adding a title to the window
         self.wm_title("Virtual Assistant")
-
 
         # creates a container to store each page
         container = ttk.Frame(self, height=400, width=600)
@@ -49,12 +52,19 @@ class VirtualAssistantGUI(tk.Tk):
 
         sv_ttk.set_theme("dark")
 
+
+# -----------------------------------------------------------------------------------------------------------------------
+# GUI METHODS
+
+
+    # changes frame/page
     def show_frame(self, cont):
         frame = self.frames[cont]
         # raises the current frame to the top
         frame.tkraise()
 
     # adds the virtual assistant's response to the response_window
+    # uses a delay to simulate typing
     def add_response(self, response):
         self.frames[MainPage].response_box.configure(state="normal")
         for char in response:
@@ -65,6 +75,7 @@ class VirtualAssistantGUI(tk.Tk):
         self.frames[MainPage].response_box.insert(tk.END, "\n")
         self.frames[MainPage].response_box.configure(state="disabled")
 
+    # handles when avatar is pressed
     def handle_click(self, event):
         """
         Custom function to handle the click event.
@@ -81,6 +92,7 @@ class VirtualAssistantGUI(tk.Tk):
         if distance <= r:
             print("Assistant clicked")
 
+    # animates the avatar to rotate.
     def animate_image(self):
         """
         Function to animate the image by rotating it.
@@ -103,7 +115,10 @@ class VirtualAssistantGUI(tk.Tk):
         self.after(50, self.animate_image)
 
 
+#-----------------------------------------------------------------------------------------------------------------------
 # MAIN WINDOW
+
+
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -122,7 +137,7 @@ class MainPage(tk.Frame):
 
         # Adding the text widget to the frame
         self.response_box = tk.Text(self, height=10, width=50, state="disabled")
-        self.response_box.pack()
+        self.response_box.pack(pady=(0, 30), padx=30)
 
         # We use the switch_window_button in order to call the show_frame() method as a lambda function
         switch_window_button = ttk.Button(
@@ -139,7 +154,11 @@ class MainPage(tk.Frame):
         )
         switch_window_button.pack(side="bottom", fill=tk.X)
 
+
+#-----------------------------------------------------------------------------------------------------------------------
 # HELP PAGE
+
+
 class HelpPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -150,8 +169,10 @@ class HelpPage(tk.Frame):
         switch_window_button.pack(side="bottom", fill=tk.X)
 
 
-
+#-----------------------------------------------------------------------------------------------------------------------
 # OPTIONS PAGE
+
+
 class SettingsPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -160,6 +181,9 @@ class SettingsPage(tk.Frame):
 
         switch_window_button = ttk.Button(self, text="Return", command=lambda: controller.show_frame(MainPage))
         switch_window_button.pack(side="bottom", fill=tk.X)
+
+
+# -----------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -197,7 +221,7 @@ class SettingsPage(tk.Frame):
 if __name__ == "__main__":
     testObj = VirtualAssistantGUI()
 
-    testObj.add_response("hello this is my big fat nuts mothafricka")
+    testObj.add_response("hello, how may I assist you?")
 
     testObj.mainloop()
 
