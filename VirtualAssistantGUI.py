@@ -3,6 +3,7 @@ from tkinter import ttk
 import sv_ttk
 import time
 from PIL import Image, ImageTk
+from SpeechToText import *
 
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -91,6 +92,7 @@ class VirtualAssistantGUI(tk.Tk):
         # Check if the distance is less than or equal to the radius of the circle
         if distance <= r:
             print("Assistant clicked")
+            self.listen_to_user()
 
     # animates the avatar to rotate.
     def animate_image(self):
@@ -104,7 +106,7 @@ class VirtualAssistantGUI(tk.Tk):
             self.angle = 359
 
         # Rotate the image
-        img = Image.open("assistant2.png")
+        img = Image.open("assistant1.png")
         img = img.rotate(self.angle)
         self.assistant_image = ImageTk.PhotoImage(img)
 
@@ -113,6 +115,11 @@ class VirtualAssistantGUI(tk.Tk):
 
         # Call this function again after 50ms
         self.after(50, self.animate_image)
+
+    def listen_to_user(self):
+        speechR = SpeechRecognizer()
+        transcription = speechR.listen()
+        self.add_response(transcription)
 
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -130,7 +137,7 @@ class MainPage(tk.Frame):
         self.canvas.pack()
 
         # Loading the image using PhotoImage
-        self.assistant_image = tk.PhotoImage(file="assistant2.png")
+        self.assistant_image = tk.PhotoImage(file="assistant1.png")
         self.image_id = self.canvas.create_image(200, 200, image=self.assistant_image)
 
 
