@@ -18,6 +18,8 @@ class VirtualAssistantGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
+        self.lock = 1
+
         # Adding a title to the window
         self.wm_title("Virtual Assistant")
 
@@ -67,6 +69,9 @@ class VirtualAssistantGUI(tk.Tk):
     # adds the virtual assistant's response to the response_window
     # uses a delay to simulate typing
     def add_response(self, response):
+
+        self.lock = 0
+
         self.frames[MainPage].response_box.configure(state="normal")
         for char in response:
             self.frames[MainPage].response_box.insert(tk.END, char)
@@ -76,23 +81,29 @@ class VirtualAssistantGUI(tk.Tk):
         self.frames[MainPage].response_box.insert(tk.END, "\n")
         self.frames[MainPage].response_box.configure(state="disabled")
 
+        self.lock = 1
+
     # handles when avatar is pressed
     def handle_click(self, event):
         """
         Custom function to handle the click event.
         """
-        # Get the coordinates of the click event
-        x, y = event.x, event.y
-        # Get the coordinates of the center of the circle
-        cx, cy = self.frames[MainPage].canvas.coords(self.frames[MainPage].image_id)
-        # Calculate the distance between the click coordinates and the center of the circle
-        distance = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
-        # Get the radius of the circle
-        r = self.assistant_image.width() / 2
-        # Check if the distance is less than or equal to the radius of the circle
-        if distance <= r:
-            print("Assistant clicked")
-            self.listen_to_user()
+
+        if self.lock == 1:
+            self.lock = 0
+
+            # Get the coordinates of the click event
+            x, y = event.x, event.y
+            # Get the coordinates of the center of the circle
+            cx, cy = self.frames[MainPage].canvas.coords(self.frames[MainPage].image_id)
+            # Calculate the distance between the click coordinates and the center of the circle
+            distance = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+            # Get the radius of the circle
+            r = self.assistant_image.width() / 2
+            # Check if the distance is less than or equal to the radius of the circle
+            if distance <= r:
+                print("Assistant clicked")
+                self.listen_to_user()
 
     # animates the avatar to rotate.
     def animate_image(self):
