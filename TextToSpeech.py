@@ -1,3 +1,6 @@
+import pyttsx3
+import os
+
 class TextToSpeech:
     """
     This class is responsible for converting text output into speech output.
@@ -18,34 +21,40 @@ class TextToSpeech:
             Converts the given text into speech output and plays it.
     """
 
-    def __init__(self, engine: str):
+    def __init__(self):
         """
         Initializes the TextToSpeech object.
 
         Args:
             engine: A text-to-speech engine to use for conversion (e.g., Google Text-to-Speech, Microsoft Speech API, etc.)
         """
-        self.engine = engine
+        self.engine = pyttsx3.init()
         self.volume = 1.0
-        self.voice = None
+        self.voices = self.engine.getProperty('voices')
+        self.rate = self.engine.getProperty("rate")
+
 
     def set_volume(self, level: float) -> None:
         """
         Sets the volume level for speech output.
-
-        Args:
-            level: A float between 0.0 and 1.0 representing the desired volume level.
         """
         self.volume = level
+
+    def set_rate(self, rate: int) -> None:
+        """
+        Sets the rate for speech output.
+        """
+        self.engine.setProperty("rate", rate)
 
     def set_voice(self, voice: str) -> None:
         """
         Sets the selected voice for speech output.
-
-        Args:
-            voice: A string representing the desired voice.
         """
-        self.voice = voice
+        if voice.lower() == "male":
+            self.engine.setProperty('voice', self.voices[0].id)
+        elif voice.lower() == "female":
+            self.engine.setProperty('voice', self.voices[1].id)
+
 
     def speak(self, text: str) -> None:
         """
@@ -54,4 +63,7 @@ class TextToSpeech:
         Args:
             text: A string representing the text to be spoken.
         """
+        self.engine.say(text)
+        self.engine.runAndWait()
+        self.engine.stop()
 

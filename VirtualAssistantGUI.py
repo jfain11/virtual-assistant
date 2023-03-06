@@ -18,6 +18,7 @@ class VirtualAssistantGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
+        # locks the assistant if busy
         self.lock = 1
 
         # Adding a title to the window
