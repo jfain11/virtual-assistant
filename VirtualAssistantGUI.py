@@ -4,7 +4,7 @@ import sv_ttk
 import time
 from PIL import Image, ImageTk
 from SpeechToText import *
-
+from TextToSpeech import *
 
 #-----------------------------------------------------------------------------------------------------------------------
 # GUI CONTAINER
@@ -67,9 +67,16 @@ class VirtualAssistantGUI(tk.Tk):
         # raises the current frame to the top
         frame.tkraise()
 
+    def speak_response(self, response):
+        speaker = TextToSpeech()
+        speaker.set_voice("female")
+        speaker.speak(response)
+
     # adds the virtual assistant's response to the response_window
     # uses a delay to simulate typing
     def add_response(self, response):
+
+
 
         self.lock = 0
 
@@ -82,6 +89,8 @@ class VirtualAssistantGUI(tk.Tk):
         self.frames[MainPage].response_box.insert(tk.END, "\n")
         self.frames[MainPage].response_box.configure(state="disabled")
 
+        #self.speak_response(response)
+        
         self.lock = 1
 
     # handles when avatar is pressed
