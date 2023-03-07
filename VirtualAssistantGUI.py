@@ -54,6 +54,8 @@ class VirtualAssistantGUI(tk.Tk):
         self.rotate_direction = 1  # 1 for clockwise, -1 for counterclockwise
         self.animate_image()
 
+
+
         sv_ttk.set_theme("dark")
 
 
@@ -74,23 +76,29 @@ class VirtualAssistantGUI(tk.Tk):
 
     # adds the virtual assistant's response to the response_window
     # uses a delay to simulate typing
-    def add_response(self, response):
-
-
+    def add_response(self, response: str, name: str) -> None:
 
         self.lock = 0
-
+        response = name + ": " + response
         self.frames[MainPage].response_box.configure(state="normal")
-        for char in response:
-            self.frames[MainPage].response_box.insert(tk.END, char)
+
+        if name == "assistant":
+            color = "#eb5b0b"
+        else:
+            color = "white"
+
+        self.frames[MainPage].response_box.tag_configure(name, foreground=color)
+
+        for i, char in enumerate(response):
+            self.frames[MainPage].response_box.insert(tk.END, char, name)
             self.frames[MainPage].response_box.see(tk.END)
             self.update()
             time.sleep(0.05)
+
+        self.frames[MainPage].response_box.insert(tk.END, "\n")
         self.frames[MainPage].response_box.insert(tk.END, "\n")
         self.frames[MainPage].response_box.configure(state="disabled")
 
-        #self.speak_response(response)
-        
         self.lock = 1
 
     # handles when avatar is pressed
@@ -140,7 +148,7 @@ class VirtualAssistantGUI(tk.Tk):
     def listen_to_user(self):
         speechR = SpeechRecognizer()
         transcription = speechR.listen()
-        self.add_response(transcription)
+        self.add_response(transcription, "user")
 
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -150,8 +158,6 @@ class VirtualAssistantGUI(tk.Tk):
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Main Page", wraplength=100000)
-        label.pack(padx=10, pady=10)
 
         # Creating a canvas to place the image
         self.canvas = tk.Canvas(self, width=400, height=400)
@@ -164,8 +170,17 @@ class MainPage(tk.Frame):
 
 
         # Adding the text widget to the frame
-        self.response_box = tk.Text(self, height=10, width=50, state="disabled")
-        self.response_box.pack(pady=(0, 30), padx=30)
+        # orange: "#eb5b0b"
+        # grey: "#5c5b5b"
+        self.response_box = tk.Text(self, height=10, width=50, state="disabled", bd=6, fg="#eb5b0b")
+        self.response_box.pack(pady=(0, 60), padx=30)
+
+        switch_window_button = ttk.Button(
+            self,
+            text="Settings",
+            command=lambda: controller.show_frame(SettingsPage),
+        )
+        switch_window_button.pack(side="left", padx=5, pady=5)
 
         # We use the switch_window_button in order to call the show_frame() method as a lambda function
         switch_window_button = ttk.Button(
@@ -173,14 +188,8 @@ class MainPage(tk.Frame):
             text="Help",
             command=lambda: controller.show_frame(HelpPage),
         )
-        switch_window_button.pack(side="bottom", fill=tk.X)
+        switch_window_button.pack(side="left")
 
-        switch_window_button = ttk.Button(
-            self,
-            text="Settings",
-            command=lambda: controller.show_frame(SettingsPage),
-        )
-        switch_window_button.pack(side="bottom", fill=tk.X)
 
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -204,8 +213,24 @@ class HelpPage(tk.Frame):
 class SettingsPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="This is the Settings Page", wraplength=100000)
-        label.pack(padx=10, pady=10)
+        title_label = ttk.Label(self, text="Settings")
+        title_label.pack(padx=10, pady=10)
+
+        separator = ttk.Separator(self, orient='horizontal')
+        separator.pack(fill='x')
+
+        gender_label = ttk.Label(self, text="Virtual Assistant Voice")
+        gender_label.pack(padx=10, pady=(40, 10))
+
+
+        self.gender = tk.StringVar()
+
+        self.gender_combobox = ttk.Combobox(self, textvariable=self.gender, width=10, state="readonly")
+        self.gender_combobox["values"] = ("Male", "Female")
+        self.gender_combobox.current(0)
+        self.gender_combobox.config()
+        self.gender_combobox.pack()
+
 
         switch_window_button = ttk.Button(self, text="Return", command=lambda: controller.show_frame(MainPage))
         switch_window_button.pack(side="bottom", fill=tk.X)
@@ -249,7 +274,7 @@ class SettingsPage(tk.Frame):
 if __name__ == "__main__":
     testObj = VirtualAssistantGUI()
 
-    testObj.add_response("hello, how may I assist you?")
+    testObj.add_response("hello, how may I assist you?", "assistant")
 
     testObj.mainloop()
 
