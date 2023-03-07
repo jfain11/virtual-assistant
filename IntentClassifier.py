@@ -19,18 +19,3 @@ class IntentClassifier:
 
         return None, None
 
-
-# Test the function with some example inputs
-intent_classifier = IntentClassifier()
-
-input_str = 'What is the weather?'
-intent, entity = intent_classifier.parse_input(input_str)
-print(f'Intent: {intent}, Entity: {entity}')
-
-input_str = 'Open Spotify'
-intent, entity = intent_classifier.parse_input(input_str)
-print(f'Intent: {intent}, Entity: {entity}')
-
-input_str = 'What time is it now?'
-intent, entity = intent_classifier.parse_input(input_str)
-print(f'Intent: {intent}, Entity: {entity}')

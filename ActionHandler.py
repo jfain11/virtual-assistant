@@ -26,27 +26,30 @@ class ActionHandler:
         my_date = datetime.strptime(date_string, format)
 
         # This prints '2009-11-29 03:17 AM'
-        print(my_date.strftime(format))
+        date = my_date.strftime(format)
+        return "time"
 
     def handle_weather(self, entity):
         # Handle the weather intent by returning the current weather
         # or a forecast if requested in the entity
-        pass
+        return "weather"
 
     def handle_music(self, entity):
         # Handle the music intent by playing the requested song,
         # artist, or playlist on a music streaming service
-        pass
+
+        return "music"
 
     def handle_search(self, query):
         # Handle a web search by opening a browser and performing the query
-        pass
+
+        return "search"
 
     def handle_reminder(self, time, message):
         # Handle setting a reminder by scheduling a notification
         # or sending an email or text message
-        pass
+        return "reminder"
 
     def handle_default(self):
         # Handle any unrecognized intent by providing a default response
-        pass
+        return "sorry, i could not understand your request"

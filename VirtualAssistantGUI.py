@@ -5,6 +5,8 @@ import time
 from PIL import Image, ImageTk
 from SpeechToText import *
 from TextToSpeech import *
+from IntentClassifier import *
+from ActionHandler import *
 
 #-----------------------------------------------------------------------------------------------------------------------
 # GUI CONTAINER
@@ -23,6 +25,9 @@ class VirtualAssistantGUI(tk.Tk):
 
         # Adding a title to the window
         self.wm_title("Virtual Assistant")
+
+        # transparency
+        # self.wm_attributes('-alpha', 0.9)
 
         # creates a container to store each page
         container = ttk.Frame(self, height=400, width=600)
@@ -121,7 +126,17 @@ class VirtualAssistantGUI(tk.Tk):
             # Check if the distance is less than or equal to the radius of the circle
             if distance <= r:
                 print("Assistant clicked")
-                self.listen_to_user()
+
+                # transcribe user speech
+                transcription = self.listen_to_user()
+
+                # add user speech to response
+                self.add_response(transcription, "user")
+
+                # process assistant response and action
+                response = self.handle_request(transcription)
+                self.add_response(response, "assistant")
+
 
     # animates the avatar to rotate.
     def animate_image(self):
@@ -145,10 +160,24 @@ class VirtualAssistantGUI(tk.Tk):
         # Call this function again after 50ms
         self.after(50, self.animate_image)
 
-    def listen_to_user(self):
+    def listen_to_user(self) -> str:
         speechR = SpeechRecognizer()
         transcription = speechR.listen()
-        self.add_response(transcription, "user")
+        return transcription
+
+    def handle_request(self, request) -> str:
+
+        ic = IntentClassifier()
+        intent, entity = ic.parse_input(request)
+
+
+
+
+        ah = ActionHandler()
+        response = ah.handle_action(intent, entity)
+
+        return response
+
 
 
 #-----------------------------------------------------------------------------------------------------------------------
