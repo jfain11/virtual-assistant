@@ -1,3 +1,3 @@
 # virtual-assistant
 
-![](https://github.com/jfain11/virtual-assistant/preview.gif)
+![](https://github.com/jfain11/virtual-assistant/master/preview.gif)
