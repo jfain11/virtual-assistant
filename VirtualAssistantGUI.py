@@ -59,8 +59,6 @@ class VirtualAssistantGUI(tk.Tk):
         self.rotate_direction = 1  # 1 for clockwise, -1 for counterclockwise
         self.animate_image()
 
-
-
         sv_ttk.set_theme("dark")
 
 
@@ -91,6 +89,7 @@ class VirtualAssistantGUI(tk.Tk):
             color = "#eb5b0b"
         else:
             color = "white"
+            response += "?"
 
         self.frames[MainPage].response_box.tag_configure(name, foreground=color)
 

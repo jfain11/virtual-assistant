@@ -1,5 +1,6 @@
 from datetime import datetime
 from AppOpener import open
+import requests
 
 class ActionHandler:
 
@@ -12,7 +13,7 @@ class ActionHandler:
         if intent == 'time':
             return self.handle_time(entity)
         elif intent == 'weather':
-            return self.handle_weather(entity)
+            return self.handle_weather()
         elif intent == 'music':
             return self.handle_music(entity)
         else:
@@ -21,18 +22,32 @@ class ActionHandler:
     def handle_time(self, entity):
         # Handle the time intent by returning the current time
         # or a specific time if provided in the entity
-        date_string = '2009-11-29 03:17 PM'
+
+        now = datetime.now()
+
         format = '%Y-%m-%d %I:%M %p'
-        my_date = datetime.strptime(date_string, format)
+        dt_string = now.strftime(format)
 
-        # This prints '2009-11-29 03:17 AM'
-        date = my_date.strftime(format)
-        return "time"
 
-    def handle_weather(self, entity):
-        # Handle the weather intent by returning the current weather
-        # or a forecast if requested in the entity
-        return "weather"
+
+
+        return dt_string
+
+    def handle_weather(self):
+        # Check if the entity specifies a location
+        api_key = '8ef8a91be10e1df884c2d91a195ba2b5'
+        url = f'https://api.openweathermap.org/data/2.5/forecast?q=Columbus&appid={api_key}'
+        response = requests.get(url)
+        print(response.status_code)
+        print(response.text)
+        data = response.json()
+
+        # Extract the current weather information
+        description = data['list'][0]['weather'][0]['description']
+        temp = data['list'][0]['main'][0]['temp']
+        feels_like = data['list'][0]['main'][0]['feels_like']
+
+        return f"The current weather forecast in Columbus is {description} with a temperture of {temp} which feels like {feels_like}."
 
     def handle_music(self, entity):
         # Handle the music intent by playing the requested song,
