@@ -2,13 +2,33 @@
 
 Project description
 
-## Key Features
+## Current Functions
 
-	Feature #1
+	Provide weather information
 	
-	Feature #2
-
-	Feature #3
+	Provide the date and/or time 
+	
+## Future Functions
+    Set a timer or alarm
+    Provide weather information
+    Play music
+    Schedule a meeting or appointment
+    Send a text message or email
+    Get news updates
+    Provide directions or navigation
+    Translate languages
+    Set a reminder
+    Make a phone call
+    Search the internet
+    Control smart home devices
+    Find a nearby restaurant or business
+    Provide sports scores and updates
+    Create a shopping list
+    Take notes or make a to-do list
+    Calculate math equations
+    Tell a joke or provide entertainment
+    Offer motivational quotes or affirmations
+    Find a TV show or movie to watch
 
 ## Installation
 
