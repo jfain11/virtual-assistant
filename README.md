@@ -10,7 +10,6 @@ Project description
 	
 ## Future Functions
     Set a timer or alarm
-    Provide weather information
     Play music
     Schedule a meeting or appointment
     Send a text message or email
