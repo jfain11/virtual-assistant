@@ -24,13 +24,13 @@ To use the app, simply clone the repository and run the MusicPlayer.py file. The
 	
 	Optional Text to Speech
 
-## Current Functions
+## Current Capabilities
 
 	Provide weather information
 	
 	Provide the date and/or time 
 	
-## Future Functions
+## Future Capabilities
     
     Set a timer or alarm
     
