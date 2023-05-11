@@ -5,6 +5,17 @@ Project description
 ## Demo
 ![preview](https://user-images.githubusercontent.com/59984623/236704072-afe03be0-4abe-495e-9b3f-8730ee07c711.gif)
 
+## Installation
+
+To use the app, simply clone the repository and run the MusicPlayer.py file. The app requires Python 3.7 or later and the Tkinter library to be installed on your system.
+
+## Built With
+
+* [tkinter](https://docs.python.org/3/library/tkinter.html) - Graphical User Interface
+* [Pillow](https://pillow.readthedocs.io/en/stable/) - Image Processing
+* [pyttsx3](https://pypi.org/project/pyttsx3/) - Text to Speech Functionality
+* [SpeechRecognition](https://pypi.org/project/SpeechRecognition/) - Speech Recognition and Transcription
+
 ## Features
 	
 	Voice Recognition
@@ -59,15 +70,6 @@ Project description
     
     Find a TV show or movie to watch
     
-## Installation
-
-To use the app, simply clone the repository and run the MusicPlayer.py file. The app requires Python 3.7 or later and the Tkinter library to be installed on your system.
-
-## Built With
-
-* [name](url) - description
-* [name](url) - description
-* [name](url) - description
 
 
 
