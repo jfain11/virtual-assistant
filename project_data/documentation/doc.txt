@@ -1,0 +1,62 @@
+    Introduction:
+        Briefly describe what your virtual assistant does.
+        Explain the purpose of the documentation.
+
+    Getting started:
+        Explain how to install and run the virtual assistant.
+        Describe any prerequisites or system requirements.
+        Provide examples of how to interact with the virtual assistant.
+
+    Features:
+        List the key features of your virtual assistant.
+        For each feature, provide a brief description and an example of how to use it.
+
+    Configuration:
+        Explain how to configure the virtual assistant.
+        Provide a list of configuration options and their default values.
+        Explain how to modify the configuration file to change these options.
+
+    Troubleshooting:
+        Provide a list of common problems and their solutions.
+        Explain how to contact support if the user is unable to resolve the issue.
+
+    Conclusion:
+        Summarize the key points of the documentation.
+        Thank the user for using your virtual assistant.
+        Provide any additional resources or links that may be useful to the user.
+
+
+
+
+
+
+
+
+
+
+IdentifyIntent.py:
+
+(LANGUAGE PATTERNS)
+
+The regular expression pattern for the weather intent is as follows:
+
+'weather': re.compile(r'.*(what(\'s| is))?\s*(the)?\s*(weather|forecast)\s*(like)?\s*(today|tonight|tomorrow)?\s*(right now|at the moment|currently)?\s*(\?)?.*', re.IGNORECASE)
+
+Here is a breakdown of the components of the pattern:
+
+    .* matches any character zero or more times
+    (what(\'s| is))? matches "what's" or "what is" optionally
+    \s* matches any whitespace character (e.g., space, tab, newline) zero or more times
+    (the)? matches "the" optionally
+    (weather|forecast) matches "weather" or "forecast"
+    \s*(like)? matches "like" optionally
+    \s*(today|tonight|tomorrow)? matches "today", "tonight", or "tomorrow" optionally
+    \s*(right now|at the moment|currently)? matches "right now", "at the moment", or "currently" optionally
+    \s*(\?)? matches a question mark optionally
+    .* matches any character zero or more times
+
+The re.IGNORECASE flag is used to make the pattern case-insensitive.
+
+In summary, the weather pattern in your code matches any input string that contains any combination of the specified
+words related to the weather intent, with the possibility of including additional text before or after the words.
+The pattern is case-insensitive, so it will match input strings regardless of the capitalization of the letters.
